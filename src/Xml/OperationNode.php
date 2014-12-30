@@ -52,9 +52,9 @@ class OperationNode extends DocumentedNode
             $this->wsdlFunction,
             $matches
         )) {
-            $this->returns = $matches[1];
-            $this->name = $matches[2];
-            $this->params = $matches[3];
+            $this->returns = $this->validateIdentifier($matches[1]);
+            $this->name = $this->validateIdentifier($matches[2]);
+            $this->params = $this->validateIdentifier($matches[3]);
         } elseif (preg_match(
             // @TODO Document when this case is triggered and what the difference is to the case above.
             '/^(list\([\w\$\d,_\- ]*\)) (\w[\w\d_\-]*)\(([\w\$\d,_\- ]*)\)$/',
@@ -97,5 +97,13 @@ class OperationNode extends DocumentedNode
     public function getReturns()
     {
         return $this->returns;
+    }
+
+    /**
+     * @param $identifier
+     * @return mixed
+     */
+    private function validateIdentifier($identifier) {
+        return preg_replace('/-/', '', $identifier);
     }
 }
